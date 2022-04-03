@@ -65,7 +65,7 @@ void Controller::openDevice()
     USB_Device->Select_Device(Connections_Bar->USB_SN_l->text().toStdString().c_str());
     USB_DeviceStatus = USB_Device->Open_Device();
     if(USB_DeviceStatus == true){
-        Connections_Bar->setUSBstatus(USB_DeviceStatus);
+        Connections_Bar->setStatus(USB_DeviceStatus);
         Connections_Bar->SettingsConnection_pb->setEnabled(false);
         openDevice_pb->setText("Отключиться");
         ui->SendRL_pb->setEnabled(true);
@@ -83,7 +83,7 @@ void Controller::closeDevice()
 {
     USB_DeviceStatus = !USB_Device->Close_Device();
     if(USB_DeviceStatus == false){
-        Connections_Bar->setUSBstatus(USB_DeviceStatus);
+        Connections_Bar->setStatus(USB_DeviceStatus);
         Connections_Bar->SettingsConnection_pb->setEnabled(true);
         openDevice_pb->setText("Подлючиться");
         ui->SendRL_pb->setEnabled(false);

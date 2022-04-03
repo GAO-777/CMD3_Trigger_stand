@@ -305,10 +305,17 @@ void ConnectionSetup::USB_page_ChangedDevice(int i)
 
 void ConnectionSetup::UpdateSetup()
 {
-    if(USB_SN_cb->currentIndex()>=0){
-        ParentSB->USB_SN_l->setText(USB_DevInfo[USB_SN_cb->currentIndex()].SerialNumber);
-    }else {
-        ParentSB->USB_SN_l->setText("NULL");
+    if(ui->USB_ConnectionType_rb->isChecked()){
+        ParentSB->ConnectionType = USB;
+        if(USB_SN_cb->currentIndex()>=0){
+            ParentSB->USB_SN_l->setText(USB_DevInfo[USB_SN_cb->currentIndex()].SerialNumber);
+        }else {
+            ParentSB->USB_SN_l->setText("NULL");
+        }
+    }else{
+        ParentSB->ConnectionType = UDP;
+        ParentSB->IP_address = IPaddress->text();
+        ParentSB->Port = Port->value();
     }
 }
 
@@ -358,14 +365,30 @@ void ConnectionSetup::init_Pages()
     QHBoxLayout* HL_IP = new QHBoxLayout();
     QHBoxLayout* HL_Port = new QHBoxLayout();
 
-    HL_IP->addWidget(new QLabel("IP: "),0,Qt::AlignLeft);
-    HL_Port->addWidget(new QLabel("Port: "),0,Qt::AlignLeft);
+
+    IPaddress = new QLineEdit();
+    QLabel* IP_label = new QLabel("IP address :");
+    IPaddress->setMinimumWidth(120);
+    IPaddress->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
+    IP_label->setFont(QFont("Segoe UI",11, QFont::Bold));
+    IP_label->setAlignment(Qt::AlignRight);
+    HL_IP->addWidget(IP_label,0,Qt::AlignRight);
+    HL_IP->addWidget(IPaddress,0,Qt::AlignLeft);
+
+    QLabel* Port_label = new QLabel("Port :");
+    Port_label->setFont(QFont("Segoe UI",11, QFont::Bold));
+    Port_label->setAlignment(Qt::AlignRight);
+    Port = new QSpinBox();
+    Port->setMinimumWidth(133);
+    Port->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
+    Port->setMaximum(900000);
+    HL_Port->addWidget(Port_label,0,Qt::AlignRight);
+    HL_Port->addWidget(Port,0,Qt::AlignLeft);
 
     MVL_UDPpage->insertLayout(0,HL_IP,0);
     MVL_UDPpage->insertLayout(1,HL_Port,0);
 
     UDP_page->setLayout(MVL_UDPpage);
-
 }
 
 void ConnectionSetup::on_ApplyButton_clicked()
@@ -398,10 +421,10 @@ ConnectionsBar::ConnectionsBar(QWidget *parent)
     SettingsConnection_pb = new QPushButton("Настройки соединения",parent);
     connect(SettingsConnection_pb,&QPushButton::clicked,this,&ConnectionsBar::callConnectionSetup);
 
-    USB_Status_l = new QLabel();
-    USB_Status_l->setFixedSize(15,15);
-    USB_Status_l->setStyleSheet("background-color: red;");
-    ConnectionsBarLayout->addWidget(USB_Status_l,0,Qt::AlignLeft);
+    Status_l = new QLabel();
+    Status_l->setFixedSize(15,15);
+    Status_l->setStyleSheet("background-color: red;");
+    ConnectionsBarLayout->addWidget(Status_l,0,Qt::AlignLeft);
     ConnectionsBarLayout->addWidget(USB_SN_l,1,Qt::AlignLeft);
     ConnectionsBarLayout->addWidget(SettingsConnection_pb,3,Qt::AlignLeft);
 
@@ -409,13 +432,13 @@ ConnectionsBar::ConnectionsBar(QWidget *parent)
     ConnectionType = NON;
 }
 
-void ConnectionsBar::setUSBstatus(bool status)
+void ConnectionsBar::setStatus(bool status)
 {
     if (status){
-        USB_Status_l->setStyleSheet("background-color: green;");
+        Status_l->setStyleSheet("background-color: green;");
     }
     else{
-         USB_Status_l->setStyleSheet("background-color: red;");
+         Status_l->setStyleSheet("background-color: red;");
     }
 }
 

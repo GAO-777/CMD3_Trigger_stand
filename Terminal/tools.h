@@ -14,7 +14,8 @@
 #include <QComboBox>
 #include<QList>
 #include<QCloseEvent>
-
+#include<QSpinBox>
+#include <QValidator>
 /*===============================================================================================*\
   ███████████████████████████████████████████████████████████████████████████████████████████████
   ███████████████████████████───█─█─█─██─█────█───█───█────█─██─█───█████████████████████████████
@@ -112,8 +113,8 @@ public:
 - - - - - - - - - - - - - UDP PAGE - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 \*==========================================================================================*/
     QWidget* UDP_page;
-    QLabel*  IPaddress;
-    QLabel*  Port;
+    QLineEdit*  IPaddress;
+    QSpinBox*  Port;
 
 
 private slots:
@@ -140,19 +141,21 @@ class ConnectionsBar : public QWidget
 public:
     explicit ConnectionsBar(QWidget *parent = nullptr);
     QWidget *ConnectionsBar_w;
-    USB_Class* USB_Device;
-    bool USB_Status;
-    QLabel* USB_SN_l;
-    QLabel* USB_Status_l;
     QPushButton* SettingsConnection_pb;
-
-
-    void setUSBstatus(bool status);
-    void callConnectionSetup();
 
     // = = = = = Данные о выбранном соединении = = = = = //
     ConnectionType ConnectionType;
+    QLabel* Status_l;
+    // - - - - - USB PAGE - - - - - - - - - - - - - - - -//
+    USB_Class* USB_Device;
+    bool USB_Status;
+    QLabel* USB_SN_l;
+    // - - - - - UDP PAGE - - - - - - - - - - - - - - - -//
+    QString IP_address;
+    int Port;
 
+    void setStatus(bool status);
+    void callConnectionSetup();
 };
 
 

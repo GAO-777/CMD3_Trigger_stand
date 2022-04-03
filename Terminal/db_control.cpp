@@ -66,7 +66,7 @@ void DB_Control::openDevice()
     MCHS->GeneratorsOff();
 
     if(MCHS->USB_DeviceStatus == true){
-        Connections_Bar->setUSBstatus(MCHS->USB_DeviceStatus);
+        Connections_Bar->setStatus(MCHS->USB_DeviceStatus);
         Connections_Bar->SettingsConnection_pb->setEnabled(false);
         openDevice_pb->setText("Отключиться");
         disconnect(openDevice_pb,&QPushButton::clicked,this,&DB_Control::openDevice);
@@ -86,7 +86,7 @@ void DB_Control::closeDevice()
 {
     MCHS->closeUSB();
     if(MCHS->USB_DeviceStatus == false){
-        Connections_Bar->setUSBstatus(MCHS->USB_DeviceStatus);
+        Connections_Bar->setStatus(MCHS->USB_DeviceStatus);
         Connections_Bar->SettingsConnection_pb->setEnabled(true);
         openDevice_pb->setText("Подлючиться");
         disconnect(openDevice_pb,&QPushButton::clicked,this,&DB_Control::closeDevice);
